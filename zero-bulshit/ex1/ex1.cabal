@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 84b19a15abf7f4241b7e2dbd67dab82c524783d4e661c932b3a5ca5c7691f07e
+-- hash: 4604e1f1fac680a213b37169761b5a20447d37b88d102923735625eb7fe1abc3
 
 name:           ex1
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Onoff
   other-modules:
       Paths_ex1
   hs-source-dirs:

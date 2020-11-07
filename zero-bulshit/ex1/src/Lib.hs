@@ -35,7 +35,6 @@ stringManipulationHandler req =
 
 
 
-
 run :: IO ()
 run = Server.startServer 
   [ helloHandler 
