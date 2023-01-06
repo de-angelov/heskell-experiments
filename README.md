@@ -1,2 +1,2 @@
 # heskell-experiments
-trying stuff with haskell
+recepies for building haskell stuff
