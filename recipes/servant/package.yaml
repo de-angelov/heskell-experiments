@@ -1,0 +1,58 @@
+name: myservant
+
+default-extensions: 
+  - BlockArguments
+  - DeriveAnyClass
+  - DeriveGeneric
+  - LambdaCase
+  - NoImplicitPrelude 
+  - OverloadedStrings
+  - DataKinds
+  - FlexibleInstances
+  # - GeneralizedNewtypeDeriving
+  - MultiParamTypeClasses
+  - RankNTypes
+  - ScopedTypeVariables
+  - TypeOperators
+  - InstanceSigs
+
+dependencies: 
+  - rio
+  - servant-server
+  - base
+  - aeson
+  - record-hasfield
+  - warp
+  - wai
+  - transformers
+  - sqlite-simple
+  - jose
+
+ghc-options: 
+  - -F -pgmF=record-dot-preprocessor 
+
+library: 
+  source-dirs: src 
+
+executables: 
+  myservant:
+    main: Main.hs
+    source-dirs: app
+    ghc-options: 
+      - -threaded 
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies: 
+      - myservant
+
+tests: 
+  myservant-test: 
+    main: Spec.hs
+    source-dirs: test 
+    ghc-options: 
+      - -threaded 
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies: 
+      - myservant 
+      - hsspec

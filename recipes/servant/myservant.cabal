@@ -1,0 +1,126 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           myservant
+version:        0.0.0
+build-type:     Simple
+
+library
+  exposed-modules:
+      App
+      Auth
+      Core
+      Db
+      Server
+      Server.Article
+      Server.Auth
+      Server.Comment
+      Server.Profile
+      Server.Tag
+      Server.User
+  other-modules:
+      Paths_myservant
+  hs-source-dirs:
+      src
+  default-extensions:
+      BlockArguments
+      DeriveAnyClass
+      DeriveGeneric
+      LambdaCase
+      NoImplicitPrelude
+      OverloadedStrings
+      DataKinds
+      FlexibleInstances
+      MultiParamTypeClasses
+      RankNTypes
+      ScopedTypeVariables
+      TypeOperators
+      InstanceSigs
+  ghc-options: -F -pgmF=record-dot-preprocessor
+  build-depends:
+      aeson
+    , base
+    , jose
+    , record-hasfield
+    , rio
+    , servant-server
+    , sqlite-simple
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+executable myservant
+  main-is: Main.hs
+  other-modules:
+      Paths_myservant
+  hs-source-dirs:
+      app
+  default-extensions:
+      BlockArguments
+      DeriveAnyClass
+      DeriveGeneric
+      LambdaCase
+      NoImplicitPrelude
+      OverloadedStrings
+      DataKinds
+      FlexibleInstances
+      MultiParamTypeClasses
+      RankNTypes
+      ScopedTypeVariables
+      TypeOperators
+      InstanceSigs
+  ghc-options: -F -pgmF=record-dot-preprocessor -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base
+    , jose
+    , myservant
+    , record-hasfield
+    , rio
+    , servant-server
+    , sqlite-simple
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+test-suite myservant-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_myservant
+  hs-source-dirs:
+      test
+  default-extensions:
+      BlockArguments
+      DeriveAnyClass
+      DeriveGeneric
+      LambdaCase
+      NoImplicitPrelude
+      OverloadedStrings
+      DataKinds
+      FlexibleInstances
+      MultiParamTypeClasses
+      RankNTypes
+      ScopedTypeVariables
+      TypeOperators
+      InstanceSigs
+  ghc-options: -F -pgmF=record-dot-preprocessor -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base
+    , hsspec
+    , jose
+    , myservant
+    , record-hasfield
+    , rio
+    , servant-server
+    , sqlite-simple
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
