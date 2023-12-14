@@ -1,0 +1,19 @@
+cradle:
+  cabal:
+    - path: "app/Main.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/Server.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/Types.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/Pages/Home.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/Pages/Login.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/API/Auth.hs"
+      component: "rio-cabal:exe:rio-cabal"
