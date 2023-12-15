@@ -12,7 +12,7 @@ import Servant.HTML.Blaze(HTML)
 loginPageHtml :: Html
 loginPageHtml =  H.docTypeHtml $ do
   H.head $ do
-            H.title "LoginPage"
+            H.title "Login Page"
   H.body $ do
             H.h1 "Its Login Time!"
             H.p "lorem ipsum"

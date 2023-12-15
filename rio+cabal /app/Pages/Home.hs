@@ -8,7 +8,7 @@ import Text.Blaze.Html5 as H
 import Servant.HTML.Blaze(HTML)
 import Servant ((:>) )
 import qualified Servant as S
-import Types (AppConfig)
+
 
 homePageHtml :: Html
 homePageHtml =  H.docTypeHtml $ do
@@ -19,8 +19,10 @@ homePageHtml =  H.docTypeHtml $ do
             H.p "lorem ipsum"
             H.p "lorem ipsum"
 
-homePage :: S.ServerT HomePage (RIO env) 
-homePage = pure homePageHtml 
+homePage :: HasLogFunc env => S.ServerT HomePage (RIO env) 
+homePage = do 
+  logDebug "Home Page Request"
+  pure homePageHtml 
 
 
-type HomePage = "" :> S.Get '[HTML] Html
+type HomePage = "home" :> S.Get '[HTML] Html

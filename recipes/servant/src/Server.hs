@@ -5,7 +5,6 @@ import RIO.Text(unpack)
 import Data.Aeson
 import Core
 import qualified Servant as S
-import Servant.Server.Experimental.Auth as SAuth
 import Servant ((:>), (:<|>) (..))
 import Prelude(putStrLn)
 import qualified Network.Wai.Handler.Warp as Warp 

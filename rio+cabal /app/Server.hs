@@ -1,58 +1,75 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE RankNTypes #-}
 
 module Server (startServer) where
 
 import RIO
-import Servant ((:<|>)(..) )
+import Servant ((:<|>)(..), (:>), Context ((:.)) )
+import Types (User)
 import qualified Servant as S
+
+
 
 import Types (AppConfig (appPort))
 import Pages.Home (HomePage, homePage)
 import Pages.Login (LoginPage, loginPage)
+import Pages.Secret (SecretPage, secretPage)
 import API.Auth (AuthAPI, authAPI)
 import Control.Monad.Trans.Except (ExceptT(ExceptT))
 import qualified Network.Wai.Handler.Warp as Warp
+import qualified Servant.Auth.Server as SAS
 
-type ServerAPI
+type ServerAPI auths
   = HomePage
-  :<|> LoginPage
-  :<|> AuthAPI
+  -- :<|> LoginPage
+  :<|> SecretPage auths 
+  -- :<|> AuthAPI
 
-server :: HasLogFunc a => S.ServerT ServerAPI (RIO a)
+server :: HasLogFunc a => S.ServerT (ServerAPI auths) (RIO a)
 server
   = homePage
-  :<|> loginPage
-  :<|> authAPI
+  -- :<|> loginPage
+  :<|> secretPage
+  -- :<|> authAPI
 
-apiProxy :: S.Proxy ServerAPI
+
+
+apiProxy :: S.Proxy (ServerAPI '[SAS.Cookie])
 apiProxy = S.Proxy
 
 
 rioToHandler :: a -> RIO a b -> S.Handler b
 rioToHandler env app = S.Handler $ ExceptT $ try $ runRIO env app
 
-startServer :: AppConfig -> RIO a ()
-startServer config =
+
+mkApp :: S.Context '[SAS.CookieSettings, SAS.JWTSettings] -> AppConfig -> S.Application 
+mkApp ctx config  
+  = S.serveWithContext apiProxy ctx rioServer 
+  where 
+    rioServer = S.hoistServerWithContext 
+                      apiProxy 
+                      (S.Proxy :: S.Proxy '[SAS.CookieSettings, SAS.JWTSettings]) 
+                      (rioToHandler config) server
+
+startServer :: AppConfig -> RIO AppConfig ()
+startServer config 
+  = liftIO SAS.generateKey 
+  >>= \key ->
   let 
-    rioServer = S.hoistServer apiProxy $ rioToHandler config  
-    app = S.serve apiProxy $ rioServer server
-  in 
-    Warp.defaultSettings
-    & Warp.setPort (appPort config)
-    & Warp.setTimeout 60
-    & flip Warp.runSettings app 
-    & liftIO 
+    port = appPort config
+    ctx 
+      = SAS.defaultCookieSettings 
+      :. SAS.defaultJWTSettings key 
+      :. S.EmptyContext
+    app = mkApp ctx config
 
--- startServer :: (HasLogFunc env, HasServantPort env) => RIO env ()
--- startServer = do
---   logInfo "Hello, Haskell from RIO StartServer"
+    settings = Warp.defaultSettings
+      & Warp.setPort port
+      & Warp.setTimeout 60
 
---   port <- view servantPortL
+    message = "Starting Server inside inner RIO on port " <> displayShow port 
 
---   run 8000 $ serve apiProxy server
-
--- runSettings :: Application -> Settings -> IO ()
-
-
+  in logDebug message
+  >> (liftIO $ Warp.runSettings settings app)
