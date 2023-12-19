@@ -15,5 +15,11 @@ cradle:
     - path: "app/Pages/Login.hs"
       component: "rio-cabal:exe:rio-cabal"
 
+    - path: "app/Pages/Secret.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/Pages/Components.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
     - path: "app/API/Auth.hs"
       component: "rio-cabal:exe:rio-cabal"

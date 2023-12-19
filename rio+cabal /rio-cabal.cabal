@@ -99,6 +99,7 @@ executable rio-cabal
         Pages.Home
         Pages.Login
         Pages.Secret
+        Pages.Components
         API.Auth
         
     exposed-modules: 

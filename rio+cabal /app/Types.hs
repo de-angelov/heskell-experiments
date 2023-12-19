@@ -31,7 +31,7 @@ data AppConfig
   }
 
 instance MonadError S.ServerError (RIO a) where
-  throwError = S.throwError 
+  throwError = throwIO 
 
 instance HasLogFunc AppConfig where
   logFuncL = lens appLogFunc (\x y -> x { appLogFunc = y })

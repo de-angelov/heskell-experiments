@@ -23,18 +23,16 @@ import qualified Servant.Auth.Server as SAS
 
 type ServerAPI auths
   = HomePage
-  -- :<|> LoginPage
+  :<|> LoginPage
   :<|> SecretPage auths 
-  -- :<|> AuthAPI
+  :<|> AuthAPI
 
 server :: HasLogFunc a => S.ServerT (ServerAPI auths) (RIO a)
 server
   = homePage
-  -- :<|> loginPage
+  :<|> loginPage
   :<|> secretPage
-  -- :<|> authAPI
-
-
+  :<|> authAPI
 
 apiProxy :: S.Proxy (ServerAPI '[SAS.Cookie])
 apiProxy = S.Proxy

@@ -8,18 +8,20 @@ import Text.Blaze.Html5 as H
 import Servant ((:>))
 import qualified Servant as S
 import Servant.HTML.Blaze(HTML)
+import qualified Pages.Components as C 
 
 loginPageHtml :: Html
 loginPageHtml =  H.docTypeHtml $ do
   H.head $ do
-            H.title "Login Page"
+    H.title "Login Page"
   H.body $ do
-            H.h1 "Its Login Time!"
-            H.p "lorem ipsum"
+    C.navbar "login"
+    H.h1 "Its Login Time!"
+    H.p "lorem ipsum"
 
 
 
-loginPage :: S.ServerT LoginPage (RIO env) 
-loginPage = pure loginPageHtml 
+loginPage :: HasLogFunc env => S.ServerT LoginPage (RIO env) 
+loginPage =  logDebug "Login Page Request" >> pure loginPageHtml 
 
 type LoginPage = "login" :> S.Get '[HTML] Html

@@ -6,18 +6,18 @@ import RIO
 import Text.Blaze.Html5 as H
 -- import Text.Blaze.Html5.Attributes as A
 import Servant.HTML.Blaze(HTML)
-import Servant ((:>) )
 import qualified Servant as S
+import qualified Pages.Components as C 
 
-
-homePageHtml :: Html
+homePageHtml :: H.Html
 homePageHtml =  H.docTypeHtml $ do
   H.head $ do
-            H.title "HomePage"
+    H.title "HomePage"
   H.body $ do
-            H.h1 "Home Sweet Home!"
-            H.p "lorem ipsum"
-            H.p "lorem ipsum"
+    C.navbar "home"
+    H.h1 "Home Sweet Home!"
+    H.p "lorem ipsum"
+    H.p "lorem ipsum"
 
 homePage :: HasLogFunc env => S.ServerT HomePage (RIO env) 
 homePage = do 
@@ -25,4 +25,4 @@ homePage = do
   pure homePageHtml 
 
 
-type HomePage = "home" :> S.Get '[HTML] Html
+type HomePage = S.Get '[HTML] H.Html
