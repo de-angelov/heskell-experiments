@@ -56,7 +56,7 @@ newtype UserPassword
 data User 
   = User 
   { username :: !Text
-  , password :: !UserPassword 
+  , id :: !Text
   } deriving (Show, Eq,  Generic, FromJSON, ToJSON, FromJWT, ToJWT, ToMarkup)
 
 createUser :: Text -> Text -> User 
