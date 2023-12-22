@@ -5,6 +5,7 @@ import RIO
 import Prelude (putStrLn)
 import Server(startServer)
 import Types(AppConfig(..))
+import qualified DB.Transaction as DBT
 
 
 
@@ -26,26 +27,33 @@ import Types(AppConfig(..))
 --           }
 --   runRIO appConfig $ logInfo "Hello, Haskell from RIO" >> startServer 
 
+getDBPool = 
+    let 
+      connectionString = undefined 
+      poolSize = 4 
+    in DBT.loadPool connectionString poolSize
+
 main :: IO ()
 main = 
   putStrLn "Hello, Haskell from IO"
-
-  >> logOptionsHandle stderr False 
-
+  >>  logOptionsHandle stderr False 
   >>= pure  
   . setLogUseTime True 
   . setLogMinLevel LevelDebug 
   . setLogUseLoc True 
   . setLogUseColor True   
-
   >>= \logOptions -> withLogFunc logOptions 
 
-  $ \logFunc ->   
+
+  $ \logFunc -> getDBPool
+  >>= \dbPool ->
+  
   let 
     appConfig 
           = AppConfig 
           { appLogFunc = logFunc
           , appPort = 8001 
+          , appDBPool = dbPool -- todo
           }
           
   in runRIO appConfig 

@@ -17,7 +17,7 @@ import Pages.Home (HomePage, homePage)
 import Pages.Login (LoginPage, loginPage)
 import Pages.Secret (SecretPage, secretPage)
 import API.Auth (AuthAPI, authAPI)
-import Control.Monad.Trans.Except (ExceptT(ExceptT))
+import Control.Monad.Except (ExceptT(ExceptT))
 import qualified Network.Wai.Handler.Warp as Warp
 import qualified Servant.Auth.Server as SAS
 

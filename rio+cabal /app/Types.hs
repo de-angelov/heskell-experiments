@@ -7,6 +7,7 @@
 module Types (
   AppConfig(..), 
   HasServantPort,
+  HasDbPool,
   User,
   UserPassword, 
   createUser, 
@@ -19,7 +20,10 @@ import Control.Monad.Error.Class (MonadError)
 import Text.Blaze.XHtml5 (ToMarkup)
 import Servant.Auth.JWT (FromJWT)
 import Servant.Auth.Server (ToJWT)
+import Hasql.Pool (Pool)
 
+class HasDbPool env where 
+  dbPoolL :: Lens' env Pool
 
 class HasServantPort env where 
   servantPortL :: Lens' env Int 
@@ -28,7 +32,11 @@ data AppConfig
   = AppConfig
   { appLogFunc :: !LogFunc
   , appPort :: !Int
+  , appDBPool :: !Pool
   }
+
+instance HasDbPool AppConfig where
+  dbPoolL = lens appDBPool (\x y -> x { appDBPool = y }) 
 
 instance MonadError S.ServerError (RIO a) where
   throwError = throwIO 
@@ -49,7 +57,7 @@ data User
   , password :: !UserPassword 
   } deriving (Show, Eq,  Generic, FromJSON, ToJSON, FromJWT, ToJWT, ToMarkup)
 
-createUser :: Text -> Text -> Text -> User 
+createUser :: Text -> Text -> User 
 createUser = undefined
 
 createUserPassword :: Text -> UserPassword

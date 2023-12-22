@@ -23,3 +23,15 @@ cradle:
 
     - path: "app/API/Auth.hs"
       component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/DB/Repository.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/DB/Schema.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/DB/Transaction.hs"
+      component: "rio-cabal:exe:rio-cabal"
+
+    - path: "app/DB/Migration.hs"
+      component: "rio-cabal:exe:rio-cabal"

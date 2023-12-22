@@ -76,9 +76,15 @@ executable rio-cabal
         , servant-auth-server
         , blaze-html
         , warp
-        , transformers
+        -- , transformers
         , aeson
         , mtl
+        , rel8 
+        , hasql
+        , hasql-migration 
+        , hasql-pool
+        , hasql-transaction
+        , file-embed
 
     ghc-options: 
         -Wall
@@ -101,6 +107,10 @@ executable rio-cabal
         Pages.Secret
         Pages.Components
         API.Auth
+        DB.Repository
+        DB.Schema
+        DB.Transaction
+        DB.Migration
         
     exposed-modules: 
         -- Server

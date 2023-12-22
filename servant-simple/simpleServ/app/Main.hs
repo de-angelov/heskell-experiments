@@ -19,7 +19,7 @@ import Text.Blaze.Html5 as H hiding (main)
 type HtmlPage = "html" :> Get '[HTML] H.Html
 
 htmlPageServer :: Server HtmlPage
-htmlPageServer = pure $ H.docTypeHtml  $ do
+htmlPageServer = pure $ H.docTypeHtml $ do
   H.head $ do 
     H.title "Test HTML PAGE"
   H.body $ do 
