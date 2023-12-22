@@ -1,5 +1,6 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE NumericUnderscores #-}
+{-# LANGUAGE InstanceSigs #-}
 module DB.Transaction where 
 
 import RIO 
@@ -9,7 +10,7 @@ import qualified Hasql.Transaction.Sessions as TS
 import qualified Hasql.Transaction as T 
 import qualified Hasql.Session as S
 import qualified Hasql.Statement as STMT
-import Types (AppConfig, HasDbPool)
+import Types (AppConfig, HasDbPool (..))
 import RIO.List (intercalate)
 import RIO.Time (secondsToDiffTime)
 
@@ -46,14 +47,14 @@ runTransactionWithPool pool transaction = do
 runStmt :: STMT.Statement () a -> T.Transaction a 
 runStmt = T.statement () 
 
--- runTransaction :: (HasDbPool env, MonadReader env m, MonadIO m) => T.Transaction a -> m a 
-runTransaction :: HasDbPool env => T.Transaction a -> RIO env a
+runTransaction :: (Types.HasDbPool env, MonadReader env m, MonadIO m) => T.Transaction a -> m a 
+-- runTransaction :: T.Transaction a -> RIO AppConfig a
 runTransaction transaction = do 
-  pool <- view dbPoolL 
+  pool <- view Types.dbPoolL 
   runTransactionWithPool pool transaction 
 
 
-executeStmt :: STMT.Statement () a -> RIO AppConfig a 
+executeStmt :: STMT.Statement () a -> RIO Types.AppConfig a 
 executeStmt = runTransaction . runStmt 
 
 truncateTables :: [Text] -> T.Transaction ()

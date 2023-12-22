@@ -10,6 +10,8 @@ module Types (
   HasDbPool,
   User,
   UserPassword, 
+  dbPoolL,
+  servantPortL,
   createUser, 
   createUserPassword
   ) where 
