@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveAnyClass  #-}
 {-# LANGUAGE DeriveGeneric  #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+-- {-# LANGUAGE InstanceSigs #-}
 
 
 module Types (
@@ -9,6 +10,7 @@ module Types (
   HasServantPort,
   HasDbPool,
   User,
+  UserLoginData(..),
   UserPassword, 
   dbPoolL,
   servantPortL,
@@ -52,6 +54,12 @@ instance HasServantPort AppConfig where
 newtype UserPassword 
   = UserPassword Text 
   deriving (Show, Eq, Generic,  FromJSON, ToJSON, ToJWT, ToMarkup)
+
+data UserLoginData
+  = UserLoginData 
+  { username :: !Text 
+  , password :: !UserPassword
+  } deriving (Show, Eq, Generic)
 
 data User 
   = User 

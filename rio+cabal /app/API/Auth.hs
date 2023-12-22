@@ -5,25 +5,40 @@ module API.Auth where
 import RIO 
 import Servant ((:>), (:<|>) (..))
 import qualified Servant as S
-import Types (User, AppConfig)
+import Types (User, UserLoginData(..), AppConfig, createUserPassword, HasDbPool)
+import qualified DB.Repository as DBR
+import qualified Servant.Auth.Server as SAS
 
 type Authentication 
   = "api" :> "login" 
-  :> S.ReqBody '[S.JSON] [User] 
+  :> S.ReqBody '[S.JSON] UserLoginData
   :> S.Post '[S.JSON] User
 
 type Registration 
   = "api" :> "register" 
-  :> S.ReqBody '[S.JSON] [User]
+  :> S.ReqBody '[S.JSON] UserLoginData
   :> S.Post '[S.JSON] User 
 
 type AuthAPI = Authentication :<|> Registration 
 
-login = undefined 
+login :: (HasDbPool env, HasLogFunc env) => UserLoginData -> RIO env User
+login (UserLoginData name pass) = do
+      uMaybe <- DBR.getUser name pass
+      case uMaybe of 
+        Nothing -> logDebug "hello from failed login" >> SAS.throwAll S.err401
+        Just u -> logDebug "hello from successful login" >> pure u 
+
+      -- let maybeUser = DBR.getUser user pass    
+      -- in maybeUser >>= traverse fromMaybe (SAS.throwAll S.err401) 
 
 
-register = undefined 
+register :: (HasDbPool env, HasLogFunc env)=> UserLoginData -> RIO env User
+register (UserLoginData user pass)= do 
+    uMaybe <- DBR.saveNewUser user pass 
+    case uMaybe of 
+      Nothing -> logDebug "hello from failed registration" >> SAS.throwAll S.err422
+      Just u -> logDebug "hello from successful registration" >> pure u 
 
-authAPI :: S.ServerT AuthAPI (RIO a) 
+authAPI :: (HasDbPool env, HasLogFunc env)  => S.ServerT AuthAPI (RIO env) 
 authAPI = login :<|> register
 
